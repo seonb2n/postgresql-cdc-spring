@@ -1,0 +1,52 @@
+-- 타겟 테이블 생성
+CREATE TABLE products
+(
+    id    SERIAL PRIMARY KEY,
+    name  VARCHAR(100)   NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    stock INT            NOT NULL
+);
+
+select *
+from products;
+
+-- Publication 생성
+create PUBLICATION product_pub FOR TABLE products;
+
+-- 테스트 데이터 입력
+INSERT INTO products (name, price, stock)
+VALUES ('MacBook Pro', 2000000, 50),
+       ('iPad Pro', 1200000, 100),
+       ('iPhone 15', 1500000, 150);
+
+
+
+-- 재고 변경 테스트 쿼리들
+-- 1. 재고 감소 (임계값 이하로)
+UPDATE products
+SET stock = 15
+WHERE id = 1;
+
+-- 2. 재고 증가
+UPDATE products
+SET stock = 80
+WHERE id = 1;
+
+-- 3. 여러 상품 재고 동시 변경
+UPDATE products
+SET stock = stock - 10;
+
+-- 4. 새 상품 추가
+INSERT INTO products (name, price, stock)
+VALUES ('Apple Watch', 800000, 5);
+
+-- 5. 상품 삭제
+DELETE
+FROM products
+WHERE id = 4;
+
+-- 데이터 확인 쿼리
+SELECT *
+FROM products
+ORDER BY id;
+
